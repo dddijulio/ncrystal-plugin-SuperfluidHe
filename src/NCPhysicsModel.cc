@@ -58,6 +58,12 @@
 #include <sstream>
 
 namespace NCPluginNamespace {
+#if NCRYSTAL_VERSION >= 4004007
+//VDOSGn moved to the NC::VDOS namespace in NCrystal 4.4.7:
+using VDOSGn = NC::VDOS::VDOSGn;
+#else
+using VDOSGn = NC::VDOSGn;
+#endif
 namespace {
 // ============================================================================ 1. Helpers
 constexpr double cn=NC::ksq2ekin(1.0)*1000;//neutron E=cn*k^2 (meV, 1/Aa)
@@ -141,7 +147,7 @@ double abeMorishimaFWHM(double temperature) {
 struct Spectrum {
   double emin,step,mean=0;
   std::vector<double> density,cdf;
-  Spectrum(const NC::VDOSGn& gn,unsigned n,double kT) {
+  Spectrum(const VDOSGn& gn,unsigned n,double kT) {
     const auto& raw=gn.getRawSpectrum(n);auto range=gn.eRange(n);
     step=gn.binWidth(n)*1000;
     //VDOSGn's grid weights have area step*sum(Gn). Zero-padded linear interpolation keeps
@@ -850,7 +856,7 @@ struct PhysicsModel::Impl {
     //The DOS as NCrystal read and regularised it (@DYNINFO type vdos).
     const auto& vdos=vdosInput.vdosData();
     NC::VDOSEval eval(vdos);msd=eval.getMSD();
-    NC::VDOSGn gn(eval);spectra.emplace_back(gn,1,kT);seedMean=spectra.front().mean;
+    VDOSGn gn(eval);spectra.emplace_back(gn,1,kT);seedMean=spectra.front().mean;
     if (!(seedMean>0)) NCRYSTAL_THROW(CalcError,"Wrong Gn transfer convention");
     const auto& seed=spectra.front();
     for (std::size_t i=1;i<seed.density.size();++i) {

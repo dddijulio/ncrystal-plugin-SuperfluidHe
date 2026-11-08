@@ -22,6 +22,7 @@
 #include "NCrystal/NCPluginBoilerplate.hh"
 #include "NCrystal/factories/NCFactImpl.hh"
 #include "NCrystal/internal/utils/NCMsg.hh"
+#include <algorithm>
 #include <cmath>
 #include <string>
 
@@ -115,6 +116,8 @@ void NCP::customPluginTest() {
   //without @TEMPERATURE (with the hint to set it in the cfg-string).
   auto text=NC::FactImpl::createTextData(NC::TextDataPath("plugins::SuperfluidHe/He4_Superfluid_T1.3K.ncmat"))
     ->rawDataCopy();
+  //Windows checkouts can have CRLF line endings:
+  text.erase(std::remove(text.begin(),text.end(),'\r'),text.end());
   const std::string temperature="@TEMPERATURE\n 1.3\n";
   auto at=text.find(temperature);
   if (at==std::string::npos)

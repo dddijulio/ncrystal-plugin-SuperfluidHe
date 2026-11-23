@@ -23,14 +23,14 @@
 name = "ncrystal-plugin-SuperfluidHe"
 version = "1.0.0"
 license = {file = "LICENSE"}
-dependencies = [ "ncrystal-core>=4.4.6,<4.5", "ncrystal-pypluginmgr>=0.0.5" ]
+dependencies = [ "ncrystal-core>=4.4.6", "ncrystal-pypluginmgr>=0.0.5" ]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: Apache Software License",
 ]
 
 [build-system]
-requires = ["scikit-build-core>=0.12", "ncrystal-core>=4.4.6,<4.5" ]
+requires = ["scikit-build-core>=0.12", "ncrystal-core>=4.4.6" ]
 build-backend = "scikit_build_core.build"
 
 [tool.scikit-build]

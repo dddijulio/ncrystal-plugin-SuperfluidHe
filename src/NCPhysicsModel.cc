@@ -59,10 +59,12 @@
 
 namespace NCPluginNamespace {
 #if NCRYSTAL_VERSION >= 4004007
-//VDOSGn moved to the NC::VDOS namespace in NCrystal 4.4.7:
+//VDOSGn and VDOSEval moved to the NC::VDOS namespace in NCrystal 4.4.7:
 using VDOSGn = NC::VDOS::VDOSGn;
+using VDOSEval = NC::VDOS::VDOSEval;
 #else
 using VDOSGn = NC::VDOSGn;
+using VDOSEval = NC::VDOSEval;
 #endif
 namespace {
 // ============================================================================ 1. Helpers
@@ -855,7 +857,7 @@ struct PhysicsModel::Impl {
     qCoarse=gauss(std::max(2u,qOrder/2));
     //The DOS as NCrystal read and regularised it (@DYNINFO type vdos).
     const auto& vdos=vdosInput.vdosData();
-    NC::VDOSEval eval(vdos);msd=eval.getMSD();
+    VDOSEval eval(vdos);msd=eval.getMSD();
     VDOSGn gn(eval);spectra.emplace_back(gn,1,kT);seedMean=spectra.front().mean;
     if (!(seedMean>0)) NCRYSTAL_THROW(CalcError,"Wrong Gn transfer convention");
     const auto& seed=spectra.front();
